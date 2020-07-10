@@ -1,0 +1,21 @@
+#Menssage
+actual_money_message: 'Tu nuevo saldo es de $'
+
+#Not used
+#default_pay_per_block: 3.25
+#default_pay_per_mob: 20.05
+
+#Min and max money to pay per:
+max_pay_block: 2.00
+min_pay_block: 5.00
+
+min_pay_mob: 8.00
+max_pay_mob: 25.00
+
+max_pay_fishing: 25.00
+min_pay_fishing: 5.00
+
+#Permissons
+perm_money_by_blocks: 'money.by.blocks'
+perm_money_by_mobs: 'money.by.mobs'
+perm_money_by_fishing: 'money.by.fishing'

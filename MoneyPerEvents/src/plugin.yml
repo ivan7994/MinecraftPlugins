@@ -1,0 +1,10 @@
+name: MoneyPerEvents
+version: 0.4
+author: ivan7994
+description: Money per blocks
+main: me.ivan7994.moneyperevents.Main
+depend: [Vault]
+
+commands:
+  e-ivan7994:
+    aliases: [i-test]
