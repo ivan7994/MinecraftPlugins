@@ -15,7 +15,7 @@ max_pay_mob: 25.00
 max_pay_fishing: 25.00
 min_pay_fishing: 5.00
 
-#Permissons
+#Permissions
 perm_money_by_blocks: 'money.by.blocks'
 perm_money_by_mobs: 'money.by.mobs'
 perm_money_by_fishing: 'money.by.fishing'
