@@ -1,21 +1,39 @@
-#Menssage
+#Message
 actual_money_message: 'Tu nuevo saldo es de $'
+error_text: 'Ocurrio un error'
 
-#Not used
-#default_pay_per_block: 3.25
-#default_pay_per_mob: 20.05
+#Min and max money default blocks:
+max_pay_block: 0.01
+min_pay_block: 1.00
 
-#Min and max money to pay per:
-max_pay_block: 2.00
-min_pay_block: 5.00
+#Ores min and max pay:
+min_pay_coal_ore: 2
+max_pay_coal_ore: 5
 
+min_pay_iron_ore: 3
+max_pay_iron_ore: 6
+
+min_pay_gold_ore: 5
+max_pay_gold_ore: 7
+
+min_pay_diamond_ore: 10
+max_pay_diamond_ore: 100
+
+min_pay_ancient_debris: 50
+max_pay_ancient_debris: 200
+
+min_pay_emerald_ore: 50
+max_pay_emerald_ore: 200
+
+#Mobs
 min_pay_mob: 8.00
 max_pay_mob: 25.00
 
+#Fishing
 max_pay_fishing: 25.00
 min_pay_fishing: 5.00
 
-#Permissons
+#Permissions
 perm_money_by_blocks: 'money.by.blocks'
 perm_money_by_mobs: 'money.by.mobs'
 perm_money_by_fishing: 'money.by.fishing'

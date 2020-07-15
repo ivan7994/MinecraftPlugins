@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -31,18 +32,39 @@ public class EventListeners implements Listener{
 	}
 	
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void BreakBlock(BlockBreakEvent event) {
 		Player plr = event.getPlayer();
-			if(plr.hasPermission(pluginL.getConfig().getString("perm_money_by_blocks"))) {		
-				EconomyResponse r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_block", "max_pay_block"));
+		EconomyResponse r = null;
+			if(!event.isCancelled() && plr.hasPermission(getCfgText("perm_money_by_blocks"))) {	
+				
+				//Rewards by ores
+				switch(event.getBlock().getBlockData().getMaterial()) {
+					case COAL_ORE: r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_coal_ore", "max_pay_coal_ore"));
+						break;
+					case IRON_ORE: r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_iron_ore", "max_pay_iron_ore"));
+						break;
+					case GOLD_ORE: r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_gold_ore", "max_pay_gold_ore"));
+						break;
+					case DIAMOND_ORE: r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_diamond_ore", "max_pay_diamond_ore"));
+						break;
+					case ANCIENT_DEBRIS: r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_ancient_debris", "max_pay_ancient_debris"));
+						break;
+					case EMERALD_ORE: r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_emerald_ore", "max_pay_emerald_ore"));
+						break;
+					default: r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_block", "max_pay_block"));
+						break;		
+				}
+				
+				//Format
 				DecimalFormat df = new DecimalFormat("#.00");
 				String playerMoney = df.format(Main.getEconomy().getBalance(plr));
+				//Success Add money or fail
 				if(r.transactionSuccess()) {
-					ActionBar("§a" + pluginL.getConfig().getString("actual_money_message") + playerMoney, plr);
+					ActionBar("§a" + getCfgText("actual_money_message") + playerMoney, plr);
 				}
 				else {
-					plr.sendMessage("§4" + "Ocurrio un error en el plugin de economia, avisale al administrador");
+					plr.sendMessage("§4" + getCfgText("error_text"));
 				}
 		}
 	}
@@ -54,18 +76,19 @@ public class EventListeners implements Listener{
 		if(e.getLastDamageCause() instanceof EntityDamageByEntityEvent)
 		{
 			EntityDamageByEntityEvent nEvent = (EntityDamageByEntityEvent) e.getLastDamageCause();
+				
 			if(nEvent.getDamager() instanceof Player)
 			{
 				Player plr = (Player)nEvent.getDamager();
-				if(plr.hasPermission(pluginL.getConfig().getString("perm_money_by_mobs"))) {
+				if(plr.hasPermission(getCfgText("perm_money_by_mobs"))) {
 					EconomyResponse r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_mob", "max_pay_mob"));
 					DecimalFormat df = new DecimalFormat("#.00");
 					String playerMoney = df.format(Main.getEconomy().getBalance(plr));
 		        	if(r.transactionSuccess()) {
-		        		ActionBar("§a" + pluginL.getConfig().getString("actual_money_message") + playerMoney, plr);
+		        		ActionBar("§a" + getCfgText("actual_money_message") + playerMoney, plr);
 		        	}
 		        	else {
-		        		plr.sendMessage("§4" + "Ocurrio un error en el plugin de economia, avisale al administrador");
+		        		plr.sendMessage("§4" + getCfgText("error_text"));
 		        	}
 				}
 			}
@@ -76,15 +99,15 @@ public class EventListeners implements Listener{
 	public void Pescando(PlayerFishEvent event) {
 		 if (event.getState() == PlayerFishEvent.State.CAUGHT_FISH) {
 			 	Player plr = event.getPlayer();
-			 	if(plr.hasPermission(pluginL.getConfig().getString("perm_money_by_fishing"))) {	
+			 	if(plr.hasPermission(getCfgText("perm_money_by_fishing"))) {	
 			 		EconomyResponse r = Main.getEconomy().depositPlayer(plr, RandomDouble("min_pay_fishing", "max_pay_fishing"));
 			 		DecimalFormat df = new DecimalFormat("#.00");
 			 		String playerMoney = df.format(Main.getEconomy().getBalance(plr));
 			 		if(r.transactionSuccess()) {
-			 			ActionBar("§a" + pluginL.getConfig().getString("actual_money_message") + playerMoney, plr);
+			 			ActionBar("§a" + getCfgText("actual_money_message") + playerMoney, plr);
 			 		}
 			 		else {
-			 			plr.sendMessage("§4" + "Ocurrio un error en el plugin de economia, avisale al administrador");
+			 			plr.sendMessage("§4" + getCfgText("error_text"));
 			 		}
 			 	}
 		 }
@@ -93,6 +116,8 @@ public class EventListeners implements Listener{
 		 }
 		
 	}
+	
+	//Utils
 	
 	public void ActionBar(String message, Player p) {
 		p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(message));
@@ -105,6 +130,8 @@ public class EventListeners implements Listener{
 	    return generatedDouble;	     
 	}
 	
-    
+    public String getCfgText(String texto) {
+    	return pluginL.getConfig().getString(texto);
+    }
     
 }
